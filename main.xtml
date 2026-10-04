@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GG VPN — Безопасный интернет</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --blue-dark: #0a1628; --blue-mid: #1a3a6c; --blue-accent: #2196F3;
+    --blue-light: #64B5F6; --white: #ffffff; --gray: #b0bec5;
+    --green: #4CAF50; --red: #f44336; --tg-blue: #2AABEE;
+  }
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--blue-dark); color: var(--white); overflow-x: hidden; }
+
+  /* HEADER */
+  header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(10, 22, 40, 0.9); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(33, 150, 243, 0.15); padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; }
+  .logo { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; }
+  .logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--blue-accent), var(--blue-light)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 900; box-shadow: 0 0 20px rgba(33, 150, 243, 0.4); }
+  nav { display: flex; gap: 30px; align-items: center; }
+  nav a { color: var(--gray); text-decoration: none; font-size: 0.95rem; transition: 0.3s; }
+  nav a:hover { color: var(--blue-light); }
+  .btn-header { background: linear-gradient(135deg, var(--blue-accent), #1565C0); color: white; border: none; padding: 10px 24px; border-radius: 25px; font-size: 0.95rem; cursor: pointer; font-weight: 600; transition: 0.3s; }
+  .btn-header:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(33, 150, 243, 0.4); }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 120px 20px 80px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(33,150,243,0.15) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+  .hero-content { position: relative; z-index: 1; max-width: 800px; }
+  .shield-container { width: 220px; height: 220px; margin: 0 auto 40px; position: relative; animation: float 3s ease-in-out infinite; }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+  .shield-svg { width: 100%; height: 100%; filter: drop-shadow(0 10px 40px rgba(33,150,243,0.5)); }
+  .wifi-signal { position: absolute; animation: pulse 2s ease-in-out infinite; }
+  .wifi-signal:nth-child(2) { top: -10px; left: 10px; animation-delay: 0s; }
+  .wifi-signal:nth-child(3) { top: -10px; right: 10px; animation-delay: 0.5s; }
+  .wifi-signal:nth-child(4) { top: 50%; left: -30px; animation-delay: 1s; }
+  @keyframes pulse { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
+  .hero h1 { font-size: 3.5rem; font-weight: 900; margin-bottom: 20px; background: linear-gradient(135deg, var(--white), var(--blue-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero p { font-size: 1.2rem; color: var(--gray); margin-bottom: 40px; line-height: 1.7; }
+  .hero-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary { background: linear-gradient(135deg, var(--blue-accent), #1565C0); color: white; border: none; padding: 16px 40px; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 35px rgba(33, 150, 243, 0.5); }
+  .btn-secondary { background: transparent; color: var(--blue-light); border: 2px solid var(--blue-accent); padding: 14px 38px; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; }
+  .btn-secondary:hover { background: rgba(33, 150, 243, 0.1); transform: translateY(-3px); }
+
+  /* STATS & FEATURES */
+  .stats { display: flex; justify-content: center; gap: 60px; padding: 60px 20px; flex-wrap: wrap; }
+  .stat-item { text-align: center; }
+  .stat-number { font-size: 2.5rem; font-weight: 900; color: var(--blue-light); }
+  .stat-label { color: var(--gray); margin-top: 5px; font-size: 0.95rem; }
+  .features { padding: 80px 40px; max-width: 1200px; margin: 0 auto; }
+  .section-title { text-align: center; font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; }
+  .section-subtitle { text-align: center; color: var(--gray); margin-bottom: 60px; font-size: 1.1rem; }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+  .feature-card { background: linear-gradient(135deg, rgba(26, 58, 108, 0.5), rgba(10, 22, 40, 0.8)); border: 1px solid rgba(33, 150, 243, 0.15); border-radius: 20px; padding: 35px; transition: 0.4s; }
+  .feature-card:hover { transform: translateY(-8px); border-color: var(--blue-accent); box-shadow: 0 20px 40px rgba(33, 150, 243, 0.15); }
+  .feature-icon { width: 60px; height: 60px; background: linear-gradient(135deg, var(--blue-accent), var(--blue-light)); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 20px; }
+  .feature-card h3 { font-size: 1.3rem; margin-bottom: 10px; }
+  .feature-card p { color: var(--gray); line-height: 1.6; }
+
+  /* PRICING */
+  .pricing { padding: 80px 40px; max-width: 1200px; margin: 0 auto; }
+  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; align-items: stretch; }
+  .price-card { background: linear-gradient(135deg, rgba(26, 58, 108, 0.4), rgba(10, 22, 40, 0.9)); border: 1px solid rgba(33, 150, 243, 0.15); border-radius: 24px; padding: 40px 35px; text-align: center; transition: 0.4s; position: relative; display: flex; flex-direction: column; }
+  .price-card.popular { border-color: var(--blue-accent); background: linear-gradient(135deg, rgba(33, 150, 243, 0.15), rgba(10, 22, 40, 0.9)); transform: scale(1.05); }
+  .price-card.popular::before { content: '🔥 ПОПУЛЯРНЫЙ'; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--blue-accent), #1565C0); padding: 6px 20px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; }
+  .price-card:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(33, 150, 243, 0.2); }
+  .price-card.popular:hover { transform: scale(1.05) translateY(-5px); }
+  .plan-name { font-size: 1.3rem; font-weight: 700; margin-bottom: 10px; color: var(--blue-light); }
+  .plan-price { font-size: 3rem; font-weight: 900; margin: 15px 0; }
+  .plan-price span { font-size: 1rem; color: var(--gray); font-weight: 400; }
+  .plan-period { color: var(--gray); margin-bottom: 25px; font-size: 0.95rem; }
+  .plan-features { list-style: none; text-align: left; margin-bottom: 30px; flex-grow: 1; }
+  .plan-features li { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--gray); font-size: 0.95rem; }
+  .plan-features li::before { content: '✅ '; }
+  .btn-plan { width: 100%; padding: 14px; border-radius: 50px; border: none; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
+  .btn-plan-outline { background: transparent; border: 2px solid var(--blue-accent); color: var(--blue-light); }
+  .btn-plan-outline:hover { background: rgba(33,150,243,0.1); }
+  .btn-plan-fill { background: linear-gradient(135deg, var(--blue-accent), #1565C0); color: white; }
+  .btn-plan-fill:hover { box-shadow: 0 8px 25px rgba(33,150,243,0.4); }
+
+  /* ACTIVATE SECTION & TABS */
+  .activate-section { padding: 80px 40px; max-width: 800px; margin: 0 auto; text-align: center; }
+  .activate-box { background: linear-gradient(135deg, rgba(26, 58, 108, 0.5), rgba(10, 22, 40, 0.9)); border: 1px solid rgba(33, 150, 243, 0.2); border-radius: 24px; padding: 40px; overflow: hidden; }
+  .tabs { display: flex; gap: 10px; margin-bottom: 30px; justify-content: center; flex-wrap: wrap; }
+  .tab-btn { background: rgba(10, 22, 40, 0.6); border: 1px solid rgba(33, 150, 243, 0.2); color: var(--gray); padding: 12px 28px; border-radius: 50px; cursor: pointer; font-size: 1rem; font-weight: 600; transition: 0.3s; }
+  .tab-btn:hover { border-color: var(--blue-accent); color: var(--white); }
+  .tab-btn.active { background: linear-gradient(135deg, var(--blue-accent), #1565C0); color: white; border-color: transparent; box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3); }
+  .tab-content { display: none; animation: fadeIn 0.4s ease; }
+  .tab-content.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .key-input-group { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; justify-content: center; }
+  .key-input { flex: 1; min-width: 250px; padding: 16px 24px; border-radius: 50px; border: 2px solid rgba(33, 150, 243, 0.3); background: rgba(10, 22, 40, 0.8); color: white; font-size: 1rem; font-family: 'Courier New', monospace; letter-spacing: 2px; outline: none; transition: 0.3s; }
+  .key-input:focus { border-color: var(--blue-accent); box-shadow: 0 0 20px rgba(33,150,243,0.2); }
+  .key-input::placeholder { color: rgba(176, 190, 197, 0.5); letter-spacing: 1px; }
+  .btn-activate { padding: 16px 35px; border-radius: 50px; border: none; background: linear-gradient(135deg, var(--blue-accent), #1565C0); color: white; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
+  .btn-activate:hover { box-shadow: 0 8px 25px rgba(33,150,243,0.4); transform: translateY(-2px); }
+  .btn-activate:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  /* SERVER SELECTOR FOR TEST TAB */
+  .server-selector { margin-bottom: 25px; }
+  .server-select { 
+    width: 100%; max-width: 400px; padding: 14px 20px; border-radius: 12px; 
+    border: 2px solid rgba(33, 150, 243, 0.3); background: rgba(10, 22, 40, 0.8); 
+    color: white; font-size: 1rem; outline: none; cursor: pointer; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364B5F6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 15px center; background-size: 18px;
+  }
+  .server-select option { background: var(--blue-dark); color: white; }
+
+  /* CONFIGS */
+  .test-notice { background: rgba(76, 175, 80, 0.1); border: 1px solid rgba(76, 175, 80, 0.3); border-radius: 12px; padding: 15px; margin-bottom: 25px; color: #81C784; font-size: 0.95rem; }
+  .expired-notice { background: rgba(244, 67, 54, 0.1); border: 1px solid rgba(244, 67, 54, 0.3); border-radius: 12px; padding: 15px; margin-bottom: 25px; color: #EF9A9A; font-size: 0.95rem; }
+  .config-list { display: flex; flex-direction: column; gap: 15px; text-align: left; }
+  .config-item { background: rgba(10, 22, 40, 0.8); border: 1px solid rgba(33, 150, 243, 0.15); border-radius: 12px; padding: 15px 60px 15px 15px; position: relative; word-break: break-all; font-family: 'Courier New', monospace; font-size: 0.8rem; color: var(--blue-light); line-height: 1.5; }
+  .config-label { position: absolute; top: -10px; left: 15px; background: var(--blue-dark); padding: 0 8px; font-size: 0.75rem; color: var(--gray); border: 1px solid rgba(33, 150, 243, 0.2); border-radius: 4px; }
+  .copy-btn { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); background: var(--blue-accent); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
+  .copy-btn:hover { background: var(--blue-light); }
+  .copy-btn.copied { background: var(--green); }
+  .success-msg { color: var(--green); font-weight: 700; margin-top: 15px; display: none; }
+  .error-msg { color: var(--red); font-weight: 700; margin-top: 15px; display: none; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); z-index: 2000; align-items: center; justify-content: center; }
+  .modal-overlay.active { display: flex; }
+  .modal { background: linear-gradient(135deg, var(--blue-mid), var(--blue-dark)); border: 1px solid rgba(33, 150, 243, 0.3); border-radius: 24px; padding: 40px; max-width: 450px; width: 90%; text-align: center; position: relative; }
+  .modal h2 { margin-bottom: 15px; font-size: 1.5rem; }
+  .modal p { color: var(--gray); margin-bottom: 25px; line-height: 1.6; }
+  .modal-close { background: none; border: none; color: var(--gray); font-size: 1.5rem; cursor: pointer; position: absolute; top: 15px; right: 20px; }
+  
+  /* TG Button */
+  .tg-btn {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: linear-gradient(135deg, var(--tg-blue), #229ED9);
+    color: white; text-decoration: none; padding: 16px 32px; border-radius: 50px;
+    font-size: 1.1rem; font-weight: 700; transition: 0.3s;
+    box-shadow: 0 8px 25px rgba(42, 171, 238, 0.4);
+  }
+  .tg-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 35px rgba(42, 171, 238, 0.6); }
+  .tg-btn svg { width: 24px; height: 24px; fill: white; }
+  
+  .tg-username {
+    background: rgba(42, 171, 238, 0.1); border: 1px solid rgba(42, 171, 238, 0.3);
+    border-radius: 12px; padding: 12px; margin: 20px 0; font-family: 'Courier New', monospace;
+    font-size: 1.2rem; color: var(--tg-blue); font-weight: 700; letter-spacing: 1px;
+  }
+
+  .modal-steps { text-align: left; margin: 20px 0; padding: 0 10px; }
+  .modal-steps li { list-style: none; padding: 8px 0; color: var(--gray); font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
+  .modal-steps li .step-num { background: var(--blue-accent); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; flex-shrink: 0; }
+
+  /* FOOTER & ANIMATIONS */
+  footer { text-align: center; padding: 40px 20px; border-top: 1px solid rgba(33, 150, 243, 0.1); color: var(--gray); font-size: 0.9rem; }
+  .fade-in { opacity: 0; transform: translateY(30px); transition: 0.8s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+  @media (max-width: 768px) {
+    header { padding: 12px 20px; } nav { display: none; }
+    .hero h1 { font-size: 2.2rem; } .hero p { font-size: 1rem; }
+    .stats { gap: 30px; } .stat-number { font-size: 1.8rem; }
+    .section-title { font-size: 1.8rem; }
+    .price-card.popular { transform: scale(1); } .price-card.popular:hover { transform: translateY(-5px); }
+    .shield-container { width: 160px; height: 160px; }
+    .config-item { font-size: 0.7rem; padding-right: 50px; }
+    .copy-btn { padding: 6px 10px; font-size: 0.75rem; right: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><div class="logo-icon"></div><span>GG VPN</span></div>
+  <nav>
+    <a href="#features">Возможности</a>
+    <a href="#pricing">Тарифы</a>
+    <a href="#activate">Активация</a>
+  </nav>
+  <button class="btn-header" onclick="openModal()">Купить ключ</button>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="shield-container">
+      <svg class="shield-svg" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#42A5F5"/><stop offset="100%" style="stop-color:#1565C0"/></linearGradient>
+          <linearGradient id="shieldBorder" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a3a6c"/><stop offset="100%" style="stop-color:#0a1628"/></linearGradient>
+        </defs>
+        <path d="M100 10 L185 45 L185 120 Q185 175 100 210 Q15 175 15 120 L15 45 Z" fill="url(#shieldBorder)" />
+        <path d="M100 25 L172 55 L172 120 Q172 168 100 200 Q28 168 28 120 L28 55 Z" fill="url(#shieldGrad)" />
+        <text x="100" y="130" text-anchor="middle" font-size="42" font-weight="900" fill="white" font-family="Arial, sans-serif" letter-spacing="3">VPN</text>
+      </svg>
+      <svg class="wifi-signal" style="top:-15px;left:5px;width:50px;height:50px" viewBox="0 0 50 50"><path d="M5 30 Q25 5 45 30" stroke="#42A5F5" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M12 35 Q25 15 38 35" stroke="#64B5F6" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M19 40 Q25 25 31 40" stroke="#90CAF9" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="25" cy="44" r="3" fill="#BBDEFB"/></svg>
+      <svg class="wifi-signal" style="top:-15px;right:5px;width:50px;height:50px" viewBox="0 0 50 50"><path d="M5 30 Q25 5 45 30" stroke="#42A5F5" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M12 35 Q25 15 38 35" stroke="#64B5F6" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M19 40 Q25 25 31 40" stroke="#90CAF9" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="25" cy="44" r="3" fill="#BBDEFB"/></svg>
+      <svg class="wifi-signal" style="top:50%;left:-35px;width:45px;height:45px" viewBox="0 0 50 50"><path d="M5 30 Q25 5 45 30" stroke="#42A5F5" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M12 35 Q25 15 38 35" stroke="#64B5F6" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M19 40 Q25 25 31 40" stroke="#90CAF9" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="25" cy="44" r="3" fill="#BBDEFB"/></svg>
+    </div>
+    <h1>Безопасный интернет<br>без границ</h1>
+    <p>GG VPN защищает ваши данные, скрывает IP-адрес и открывает доступ к контенту по всему миру. Шифрование военного уровня и скорость без компромиссов.</p>
+    <div class="hero-buttons">
+      <a href="#pricing" class="btn-primary">Выбрать тариф</a>
+      <a href="#activate" class="btn-secondary">Попробовать бесплатно</a>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="stat-item fade-in"><div class="stat-number">50+</div><div class="stat-label">Стран</div></div>
+  <div class="stat-item fade-in"><div class="stat-number">5000+</div><div class="stat-label">Серверов</div></div>
+  <div class="stat-item fade-in"><div class="stat-number">10M+</div><div class="stat-label">Пользователей</div></div>
+  <div class="stat-item fade-in"><div class="stat-number">99.9%</div><div class="stat-label">Аптайм</div></div>
+</section>
+
+<section class="features" id="features">
+  <h2 class="section-title fade-in">Почему GG VPN?</h2>
+  <p class="section-subtitle fade-in">Всё, что нужно для безопасного интернета</p>
+  <div class="features-grid">
+    <div class="feature-card fade-in"><div class="feature-icon"></div><h3>AES-256 Шифрование</h3><p>Военный уровень шифрования защищает все ваши данные от перехвата и взлома.</p></div>
+    <div class="feature-card fade-in"><div class="feature-icon"></div><h3>Высокая скорость</h3><p>Оптимизированные серверы обеспечивают минимальные задержки и максимальную скорость.</p></div>
+    <div class="feature-card fade-in"><div class="feature-icon"></div><h3>50+ стран</h3><p>Подключайтесь к серверам по всему миру и обходите географические ограничения.</p></div>
+    <div class="feature-card fade-in"><div class="feature-icon"></div><h3>No-Logs политика</h3><p>Мы не храним и не передаём данные о вашей активности третьим лицам.</p></div>
+    <div class="feature-card fade-in"><div class="feature-icon"></div><h3>Все устройства</h3><p>Windows, macOS, iOS, Android, Linux — подключайте до 5 устройств одновременно.</p></div>
+    <div class="feature-card fade-in"><div class="feature-icon">🛡</div><h3>Kill Switch</h3><p>Автоматическое отключение интернета при разрыве VPN-соединения для вашей защиты.</p></div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <h2 class="section-title fade-in">Тарифные планы</h2>
+  <p class="section-subtitle fade-in">Выберите подходящий план и напишите нам для получения ключа</p>
+  <div class="pricing-grid">
+    <div class="price-card fade-in">
+      <div class="plan-name">Стартовый</div><div class="plan-price">299₽ <span>/ мес</span></div><div class="plan-period">1 месяц доступа</div>
+      <ul class="plan-features"><li>1 устройство</li><li>10 стран</li><li>AES-256 шифрование</li><li>Базовая поддержка</li><li>Kill Switch</li></ul>
+      <button class="btn-plan btn-plan-outline" onclick="openModal('Стартовый — 299₽/мес')">Купить</button>
+    </div>
+    <div class="price-card popular fade-in">
+      <div class="plan-name">Оптимальный</div><div class="plan-price">199₽ <span>/ мес</span></div><div class="plan-period">12 месяцев — 2 388₽</div>
+      <ul class="plan-features"><li>5 устройств</li><li>50+ стран</li><li>AES-256 шифрование</li><li>Приоритетная поддержка</li><li>Kill Switch + No-Logs</li><li>Выделенные серверы</li></ul>
+      <button class="btn-plan btn-plan-fill" onclick="openModal('Оптимальный — 2 388₽/год')">Купить</button>
+    </div>
+    <div class="price-card fade-in">
+      <div class="plan-name">Максимальный</div><div class="plan-price">149₽ <span>/ мес</span></div><div class="plan-period">24 месяца — 3 576₽</div>
+      <ul class="plan-features"><li>10 устройств</li><li>50+ стран</li><li>AES-256 шифрование</li><li>VIP поддержка 24/7</li><li>Все функции включены</li><li>Статический IP</li><li>Anti-DDoS защита</li></ul>
+      <button class="btn-plan btn-plan-outline" onclick="openModal('Максимальный — 3 576₽/2 года')">Купить</button>
+    </div>
+  </div>
+</section>
+
+<section class="activate-section" id="activate">
+  <h2 class="section-title fade-in">Подключение к VPN</h2>
+  <p class="section-subtitle fade-in">Активируйте купленный ключ или используйте тестовый доступ</p>
+  
+  <div class="activate-box fade-in">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('own-key')">🔑 Мой ключ</button>
+      <button class="tab-btn" onclick="switchTab('test-key')"> Тестовый ключ (2 дня)</button>
+    </div>
+
+    <!-- TAB 1: OWN KEY -->
+    <div id="tab-own-key" class="tab-content active">
+      <p style="color: var(--gray); margin-bottom: 15px;">Введите ключ, полученный после оплаты</p>
+      <div class="key-input-group">
+        <input type="text" class="key-input" id="keyInput" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19">
+        <button class="btn-activate" onclick="activateKey()">Активировать</button>
+      </div>
+      <div class="success-msg" id="successMsg">✅ Ключ успешно активирован!</div>
+      <div class="error-msg" id="errorMsg">❌ Неверный или истекший ключ. Проверьте формат.</div>
+      <div id="own-key-result" style="margin-top: 30px; display: none;"></div>
+    </div>
+
+    <!-- TAB 2: TEST KEY WITH SERVER SELECTOR -->
+    <div id="tab-test-key" class="tab-content">
+      <div class="test-notice">  <strong>Тестовый доступ на 48 часов.</strong> Выберите сервер и скопируйте конфигурацию для вашего клиента.</div>
+      
+      <div class="server-selector">
+        <select class="server-select" id="serverSelect" onchange="updateTestConfig()">
+          <option value="fi">🇮 Финляндия — Анти белые списки</option>
+          <option value="nl">🇳🇱 Нидерланды — Анти белые списки 2</option>
+          <option value="us">🇺🇸 США — Быстрый 1</option>
+        </select>
+      </div>
+
+      <div class="config-list" id="testConfigContainer">
+        <!-- Config will be rendered here by JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 GG VPN. Все права защищены. | Политика конфиденциальности | Условия использования</p>
+</footer>
+
+<!-- MODAL: TELEGRAM CONTACT -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    
+    <div style="font-size: 3.5rem; margin-bottom: 10px;">✈️</div>
+    <h2>Покупка ключа через Telegram</h2>
+    <p id="modalPlanText" style="color: var(--blue-light); font-weight: 600; margin-bottom: 15px;"></p>
+    <p>Для получения платного ключа напишите нашему менеджеру в Telegram. Ответ в течение 5 минут!</p>
+    
+    <div class="tg-username">@error430r</div>
+    
+    <ul class="modal-steps">
+      <li><span class="step-num">1</span> Нажмите кнопку ниже</li>
+      <li><span class="step-num">2</span> Напишите желаемый тариф</li>
+      <li><span class="step-num">3</span> Оплатите удобным способом</li>
+      <li><span class="step-num">4</span> Получите ключ и активируйте</li>
+    </ul>
+
+    <a href="https://t.me/error430r" target="_blank" class="tg-btn">
+      <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      Написать в Telegram
+    </a>
+  </div>
+</div>
+
+<script>
+  // ===== MOCK DATABASE (LocalStorage) =====
+  function getDB() {
+    const defaultDB = {
+      'TRIAL-2DAY-X7K9-M4P2': { type: 'trial', expiresAt: Date.now() + 48*60*60*1000 },
+      'TEST-48HR-B3N8-Q5W1': { type: 'trial', expiresAt: Date.now() + 48*60*60*1000 },
+      'DEMO-2DAY-V9C2-L6Z8': { type: 'trial', expiresAt: Date.now() + 48*60*60*1000 }
+    };
+    const stored = localStorage.getItem('gg_vpn_keys_db');
+    return stored ? JSON.parse(stored) : defaultDB;
+  }
+  function saveDB(db) { localStorage.setItem('gg_vpn_keys_db', JSON.stringify(db)); }
+
+  // ===== MAIN CONFIGURATION (2-DAY ACCESS) =====
+  const mainConfig = "vless://2c634977-584e-4e1f-b501-1b70c77a6743@185.141.227.180:2053?encryption=none&security=tls&sni=dismissaltree.net&alpn=h2%2C%20http%2F1.1&fp=random&type=xhttp&mode=auto&host=dismissaltree.net&path=%2Fapi%2Fv1%2Fupload#%F0%9F%87%AB%F0%9F%87%AE%D0%90%D0%BD%D1%82%D0%B8%20%D0%B1%D0%B5%D0%BB%D1%8B%D0%B5%20%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B8";
+
+  // ===== TEST CONFIGURATIONS =====
+  const testConfigs = {
+    fi: "vless://2c634977-584e-4e1f-b501-1b70c77a6743@185.141.227.180:2053?encryption=none&security=tls&sni=dismissaltree.net&alpn=h2%2C%20http%2F1.1&fp=random&type=xhttp&mode=auto&host=dismissaltree.net&path=%2Fapi%2Fv1%2Fupload#%F0%9F%87%AB%F0%9F%87%AE%D0%90%D0%BD%D1%82%D0%B8%20%D0%B1%D0%B5%D0%BB%D1%8B%D0%B5%20%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B8",
+    nl: "vless://2c634977-584e-4e1f-b501-1b70c77a6743@185.141.227.180:2053?encryption=none&security=tls&sni=dismissaltree.net&type=xhttp&mode=auto&host=dismissaltree.net&path=%2Fapi%2Fv1%2Fupload&extra=%7B%22host%22%3A%22%22%2C%22path%22%3A%22%22%2C%22mode%22%3A%22%22%2C%22xPaddingBytes%22%3A%22100-1000%22%2C%22xPaddingObfsMode%22%3Afalse%2C%22xPaddingKey%22%3A%22%22%2C%22xPaddingHeader%22%3A%22%22%2C%22xPaddingPlacement%22%3A%22%22%2C%22xPaddingMethod%22%3A%22%22%2C%22uplinkHTTPMethod%22%3A%22%22%2C%22sessionIDPlacement%22%3A%22%22%2C%22sessionIDKey%22%3A%22%22%2C%22sessionIDTable%22%3A%22%22%2C%22sessionIDLength%22%3A%220%22%2C%22seqPlacement%22%3A%22%22%2C%22seqKey%22%3A%22%22%2C%22uplinkDataPlacement%22%3A%22%22%2C%22uplinkDataKey%22%3A%22%22%2C%22uplinkChunkSize%22%3A%220%22%2C%22noGRPCHeader%22%3Afalse%2C%22noSSEHeader%22%3Afalse%2C%22scMaxEachPostBytes%22%3A%221000000%22%2C%22scMinPostsIntervalMs%22%3A%2230%22%2C%22scMaxBufferedPosts%22%3A0.0%2C%22scStreamUpServerSecs%22%3A%220%22%2C%22serverMaxHeaderBytes%22%3A0.0%2C%22xmux%22%3A%7B%22maxConcurrency%22%3A%2216-32%22%2C%22maxConnections%22%3A%220%22%2C%22cMaxReuseTimes%22%3A%2264-128%22%2C%22hMaxRequestTimes%22%3A%220%22%2C%22hMaxReusableSecs%22%3A%220%22%2C%22hKeepAlivePeriod%22%3A0.0%7D%7D#%F0%9F%87%B3%F0%9F%87%B1%D0%B0%D0%BD%D1%82%D0%B8%20%D0%B1%D0%B5%D0%BB%D1%8B%D0%B5%20%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B8%202",
+    us: "vless://2c634977-584e-4e1f-b501-1b70c77a6743@185.141.227.180:2053?encryption=none&security=tls&sni=dismissaltree.net&fp=random&type=xhttp&mode=auto&host=dismissaltree.net&path=%2Fapi%2Fv1%2Fupload#%F0%9F%87%BA%F0%9F%87%B8%D0%B1%D1%8B%D1%81%D1%82%D1%80%D1%8B%D0%B9%201"
+  };
+
+  // ===== EXPIRED CONFIGS =====
+  const expiredConfigs = [
+    "vless://warning@0.0.0.0:1?type=tcp&security=reality&pbk=dE3wtv44FXcZGAp0MYiYYa79z_JlcVNmPN5t8qa0cTs&fp=chrome&sni=zieng2.org&sid=d3&spx=%2F&flow=xtls-rprx-vision#Ваша%20подписка%20устарела!",
+    "vless://warning@0.0.0.0:1?type=tcp&security=reality&pbk=dkvpi6EugCxGdX80VFiAU4LtuakJn8MKtrN2BJGfnnQ&fp=chrome&sni=zieng2.org&sid=b2&spx=%2F&flow=xtls-rprx-vision#Новая%20версия%20в%20репозитории",
+    "vless://warning@0.0.0.0:1?type=tcp&security=reality&pbk=w7WIGludzG_nDV1JiMg0FWJWrwJh6SSM1dDXfWNOwT0&fp=chrome&sni=zieng2.org&sid=c4&spx=%2F&flow=xtls-rprx-vision#https://github.com/zieng2/wl"
+  ];
+
+  // ===== TABS =====
+  function switchTab(tabName) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    if (tabName === 'own-key') {
+      document.querySelectorAll('.tab-btn')[0].classList.add('active');
+      document.getElementById('tab-own-key').classList.add('active');
+    } else {
+      document.querySelectorAll('.tab-btn')[1].classList.add('active');
+      document.getElementById('tab-test-key').classList.add('active');
+      updateTestConfig();
+    }
+  }
+
+  // ===== UPDATE TEST CONFIG BASED ON SELECTION =====
+  function updateTestConfig() {
+    const serverCode = document.getElementById('serverSelect').value;
+    const container = document.getElementById('testConfigContainer');
+    const configValue = testConfigs[serverCode];
+    const decodedLabel = decodeURIComponent(configValue.split('#').pop());
+    
+    container.innerHTML = `
+      <div class="config-item">
+        <span class="config-label">${decodedLabel}</span>
+        ${configValue}
+        <button class="copy-btn" onclick="copyConfig(this, '${configValue}')">Копировать</button>
+      </div>
+    `;
+  }
+
+  // ===== KEY INPUT =====
+  const keyInput = document.getElementById('keyInput');
+  keyInput.addEventListener('input', function(e) {
+    let val = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    let formatted = '';
+    for (let i = 0; i < val.length && i < 16; i++) {
+      if (i > 0 && i % 4 === 0) formatted += '-';
+      formatted += val[i];
+    }
+    e.target.value = formatted;
+  });
+
+  // ===== RENDER PAID/EXPIRED CONFIGS =====
+  function renderConfigs(containerId, configList, isExpired) {
+    const container = document.getElementById(containerId);
+    container.style.display = 'block';
+    let html = '';
+    if (isExpired) {
+      html += `<div class="expired-notice"> ⚠️ <strong>Срок действия ключа истёк (прошло 48 часов).</strong><br>Напишите @error430r для продления подписки.</div>`;
+    } else {
+      html += `<div class="test-notice"> ✅ <strong>Активная подписка!</strong> Скопируйте конфигурацию и добавьте её в клиент.<br><small>Ключ действителен 48 часов с момента активации.</small></div>`;
+    }
+    html += '<div class="config-list">';
+    configList.forEach((cfg, index) => {
+      html += `<div class="config-item"><span class="config-label">Конфигурация #${index + 1}</span>${cfg}<button class="copy-btn" onclick="copyConfig(this, '${cfg}')">Копировать</button></div>`;
+    });
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  // ===== ACTIVATE KEY =====
+  async function activateKey() {
+    const key = keyInput.value.trim().toUpperCase();
+    const successMsg = document.getElementById('successMsg');
+    const errorMsg = document.getElementById('errorMsg');
+    const resultContainer = document.getElementById('own-key-result');
+    const btn = document.querySelector('.btn-activate');
+
+    successMsg.style.display = 'none';
+    errorMsg.style.display = 'none';
+    resultContainer.style.display = 'none';
+    
+    btn.textContent = 'Проверка...';
+    btn.disabled = true;
+    await new Promise(r => setTimeout(r, 600));
+
+    const db = getDB();
+    const record = db[key];
+
+    if (!record) {
+      errorMsg.style.display = 'block';
+      errorMsg.textContent = '❌ Ключ не найден. Напишите @error430r для получения ключа.';
+    } else {
+      // СТРОГАЯ ПРОВЕРКА ВРЕМЕНИ: если прошло больше 48 часов, считаем истёкшим
+      const isExpired = Date.now() > record.expiresAt;
+      successMsg.style.display = 'block';
+      
+      // Если истёк - показываем warning конфиги. Если активен - показываем основной рабочий конфиг.
+      renderConfigs('own-key-result', isExpired ? expiredConfigs : [mainConfig], isExpired);
+    }
+
+    btn.textContent = 'Активировать';
+    btn.disabled = false;
+  }
+
+  // ===== COPY =====
+  function copyConfig(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const originalText = btn.textContent;
+      btn.textContent = '✓ Скопировано';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = originalText; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  // ===== MODAL (TELEGRAM) & AUTO KEY GENERATION =====
+  function openModal(planText) {
+    document.getElementById('modalOverlay').classList.add('active');
+    document.getElementById('modalPlanText').textContent = planText || 'Выбранный тариф';
+  }
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+  document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+  // ===== INIT =====
+  window.addEventListener('DOMContentLoaded', () => {
+    updateTestConfig();
+  });
+
+  // ===== ANIMATIONS =====
+  const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => { anchor.addEventListener('click', function(e) { e.preventDefault(); const target = document.querySelector(this.getAttribute('href')); if (target) target.scrollIntoView({ behavior: 'smooth' }); }); });
+</script>
+
+</body>
+</html>
